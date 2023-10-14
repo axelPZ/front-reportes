@@ -1,34 +1,82 @@
 <div class="contenido contenido-home">
     <div class="alinearGlobal">
         <div class="agregarIncidente">
-            <form ation="">
+            <form ation="" [formGroup]="validForm">
                 <h2>Registrarme</h2>
-
-                <div class="item">
-                    <label for="">Nombre</label>
-                    <input type="text" name="" id="">
+                <div *ngIf="item==1" class="item" >
+                    <label for="">Nombres:<span class="requerido">*</span></label>
+                    <input type="text" name="" id="" formControlName="Nombres">
+                    <div  *ngIf="Nombres?.invalid && ( Nombres?.touched || Nombres?.dirty )"  class="errorsInput">
+                        {{errorsInput(Nombres?.errors, 'Nombre')}}
+                    </div>
                 </div>
-                <div class="item">
-                    <label for="">Apellido</label>
-                    <input type="text" name="" id="">
+                <div *ngIf="item==1" class="item">
+                    <label for="">Apellidos:<span class="requerido">*</span></label>
+                    <input type="text" name="" id="" formControlName="Apellidos">
+                    <div  *ngIf="Apellidos?.invalid && ( Apellidos?.touched || Apellidos?.dirty )"  class="errorsInput">
+                        {{errorsInput(Apellidos?.errors, 'Apellido')}}
+                    </div>
                 </div>
-                <div class="item">
-                    <label for="">Fecha de nacimiento</label>
-                    <input type="date" name="" id="">
+                <div *ngIf="item==1" class="item">
+                    <label for="">Fecha de nacimiento:<span class="requerido">*</span></label>
+                    <input type="date" name="" id=""formControlName="FechaDeNacimiento">
+                    <div  *ngIf="FechaDeNacimiento?.invalid && ( FechaDeNacimiento?.touched || FechaDeNacimiento?.dirty )"  class="errorsInput">
+                        {{errorsInput(FechaDeNacimiento?.errors, 'Fecha')}}
+                    </div>
                 </div>
-                <div class="item">
-                    <label for="">Edad</label>
-                    <input type="text" name="" id="">
+                <div *ngIf="item==1" class="item">
+                    <label for="">Edad:<span class="requerido">*</span></label>
+                    <input type="number" name="" id="" formControlName="Edad">
+                    <div  *ngIf="Edad?.invalid && ( Edad?.touched || Edad?.dirty )"  class="errorsInput">
+                        {{errorsInput(Edad?.errors, 'Edad')}}
+                    </div>
                 </div>
-                <div class="item">
-                    <label for="">Correo Electrónico</label>
-                    <input type="text" name="" id="">
+                
+                <div *ngIf="item==2" class="item">
+                    <label for="">Alias:<span class="requerido">*</span></label>
+                    <input type="text" name="" id="" formControlName="Alias">
+                    <div  *ngIf="Alias?.invalid && ( Alias?.touched || Alias?.dirty )"  class="errorsInput">
+                        {{errorsInput(Alias?.errors, 'Alias')}}
+                    </div>
                 </div>
-                <div class="item">
-                    <label for="">Password</label>
-                    <input type="password" name="" id="">
+                <div *ngIf="item==2" class="item">
+                    <label for="">Correo Electrónico:<span class="requerido">*</span></label>
+                    <input type="text" name="" id="" formControlName="Email">
+                    <div  *ngIf="Email?.invalid && ( Email?.touched || Email?.dirty )"  class="errorsInput">
+                        {{errorsInput(Email?.errors, 'Correo Electronico')}}
+                    </div>
                 </div>
-                <input type="button" value="Agregar">
+                <div *ngIf="item==2" class="item">
+                    <label for="">Contraseña:<span class="requerido">*</span></label>
+                    <input type="password" name="" id="" formControlName="Password">
+                    <div  *ngIf="Password?.invalid && ( Password?.touched || Password?.dirty )"  class="errorsInput">
+                        {{errorsInput(Password?.errors, 'Contraseña')}}
+                    </div>
+                </div>
+                <div *ngIf="item==2" class="item">
+                    <label for="">Repetir Contraseña:<span class="requerido">*</span></label>
+                    <input type="password" name="" id="" formControlName="RePassword">
+                    <div  *ngIf="RePassword?.invalid && ( RePassword?.touched || RePassword?.dirty )"  class="errorsInput">
+                        {{errorsInput(RePassword?.errors, 'Contraseña')}}
+                    </div>
+                </div>
+                <div *ngIf="item==3" class="item">
+                    <div class="terminos">
+                    <input type="checkbox" name="" id="" formControlName="AceptarTer">
+                    <label for="">E leido y aceptado los <a routerLink="/Terms/Conditions">terminos y las condiciones:</a> <span class="requerido">*</span></label>
+                    <div  *ngIf="AceptarTer?.invalid && ( AceptarTer?.touched || AceptarTer?.dirty )"  class="errorsInput">
+                        {{errorsInput(AceptarTer?.errors, 'Terminos y condiciones')}}
+                    </div>
+                    </div>
+                </div>
+                <div *ngIf="spinner"  class="spinner">
+                    <span class="loader"></span>
+                  </div>
+                <div class="botones">
+                    <input *ngIf="item >=2" type="button" value="Regresar" (click)="continuarRegresar($event)">
+                    <input *ngIf="item < 3"type="button" value="Continuar" (click)="continuarRegresar($event)">
+                    <input *ngIf="item >= 3"type="button" value="Registrarme" (click)="onSubmit($event)" >
+                </div>
             </form>
         </div>
     </div>

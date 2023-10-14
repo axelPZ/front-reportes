@@ -15,6 +15,15 @@
     justify-content: center;
     position: absolute;
     right: 0;
+    @media(max-width: 530px){
+        width: 300px;
+        @media(max-width: 400px){
+            width: 250px;
+            @media(max-width: 330px){
+                width: 200px;
+            }
+        }
+    }
 }
 
 .agregarIncidente form {
@@ -32,7 +41,67 @@
     0 8px 16px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(8px);
     max-height: 70%;
+    position: absolute;
+    z-index: 1;
+    transition: left 0.3s ease-out, opacity 0.3s ease-out, visibility 0.3s ease-out;
 }
+
+.formOculto {
+    left: 406px;
+     opacity: 0;
+    visibility: hidden;
+}
+
+.formView {
+    left: -35px;
+    opacity: 1;
+    visibility: visible;
+}
+
+
+.plus{
+    cursor: pointer;
+    position: absolute;
+    background-color: #093a79;
+    width: 50px;
+    text-align: center;
+    height: auto;
+    padding: 10px 0;
+    z-index: 1;
+    border-radius: 20px 0 0 20px;
+    color: white;
+    font-weight: bold;
+    transition: left 0.3s ease-out, opacity 0.3s ease-out, visibility 0.3s ease-out;
+    @media(max-width: 350px){
+        width: 35px;
+    }
+
+}
+
+.plus svg {
+    transform: rotate(-90deg);
+}
+
+.plusSelected {
+    left: -85px;
+    @media(max-width: 350px){
+        left: -70px;
+    }
+}
+
+.plusNoSelected {
+    left: 350px;
+    @media(max-width: 530px){
+        left: 250px;
+        @media(max-width: 400px){
+            left: 200px;
+            @media(max-width: 330px){
+                left: 170px
+            }
+        }
+    }
+}
+
 .agregarIncidente form .item {
     width: 100%;
     display: flex;
@@ -61,8 +130,8 @@
     border-radius: 10px;
     max-width: 100%;
     min-width: 100%;
-    min-height: 100px!important;
-    max-height: 125px!important;
+    min-height: 60px!important;
+    max-height: 60px!important;
 
     padding: 5px;
 }
@@ -81,3 +150,5 @@
     0 4px 8px rgba(0, 0, 0, 0.1),
     0 8px 16px rgba(0, 0, 0, 0.2);
 }
+
+
