@@ -8,13 +8,15 @@ import { AuthComponent } from './components/auth/auth.component';
 import { ValidEmailComponent } from './components/valid-email/valid-email.component';
 import { RequestPassComponent } from './components/request-pass/request-pass.component';
 import { QuienessomosComponent } from './components/quienessomos/quienessomos.component';
+import { TerminosCondicionesComponent } from './components/terminos-condiciones/terminos-condiciones.component';
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'Register', component: RegisterComponent },
     { path: 'Auth', component: AuthComponent },
-    { path: 'Recover/Password', component: RequestPassComponent },
+    { path: 'Recover/Password/:token', component: RequestPassComponent },
     { path: 'Valid/Email', component: ValidEmailComponent },
+    { path: 'Terms/Conditions', component: TerminosCondicionesComponent },
     { path: 'Info', component: QuienessomosComponent },
     { path: '**', component: HomeComponent }
 ]

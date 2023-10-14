@@ -4,7 +4,11 @@ import { BrowserModule } from '@angular/platform-browser';
 // el routing
 import { routing, appRoutingProviders } from './app.routing';
 
+import { ReactiveFormsModule } from '@angular/forms';
+
 import { GoogleMapsModule } from '@angular/google-maps';
+
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -17,6 +21,7 @@ import { ValidEmailComponent } from './components/valid-email/valid-email.compon
 import { AddRegsitroComponent } from './components/add-regsitro/add-regsitro.component';
 import { AddUpdateEventComponent } from './components/add-update-event/add-update-event.component';
 import { QuienessomosComponent } from './components/quienessomos/quienessomos.component';
+import { TerminosCondicionesComponent } from './components/terminos-condiciones/terminos-condiciones.component';
 
 @NgModule({
   declarations: [
@@ -30,12 +35,15 @@ import { QuienessomosComponent } from './components/quienessomos/quienessomos.co
     ValidEmailComponent,
     AddRegsitroComponent,
     AddUpdateEventComponent,
-    QuienessomosComponent
+    QuienessomosComponent,
+    TerminosCondicionesComponent
   ],
   imports: [
     BrowserModule,
     routing,
-    GoogleMapsModule
+    GoogleMapsModule,
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
     appRoutingProviders,
