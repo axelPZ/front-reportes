@@ -1,14 +1,6 @@
 
-.contenido-home {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    
-}
 
 .agregarIncidente {
-    height: 100%;
-    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;

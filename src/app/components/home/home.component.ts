@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     private _route: ActivatedRoute, 
     private _userService: UserServices
   ) { 
-    this.mostrar = false;
+    this.mostrar = true;
     this.eventos = [];
     this.spinner = false;
     this.token = '';
@@ -186,9 +186,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
    // Define los límites máximos para restringir la vista a Guatemala
-    const maxBounds: L.LatLngBoundsExpression = [
-      [14.2361, -92.2292], // Esquina inferior izquierda (suroeste)
-      [17.8196, -88.2177], // Esquina superior derecha (noreste)
+   const maxBounds: L.LatLngBoundsExpression = [
+    [7, -94],
+    [22, -83],
     ];
     this.map.setMaxBounds(maxBounds);
 
