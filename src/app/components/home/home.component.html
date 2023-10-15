@@ -1,47 +1,59 @@
 <div class="contenido contenido-home">
     <div class="alinearGlobal">
+
+        <div class="map-container">
+            <div class="map-frame">
+                <div id="map"></div>
+            </div>
+        </div>
+
+       <div class="agregarIncidente">
         
-        <div class="map-wrap">
-            <a href="https://www.maptiler.com" class="watermark"><img
-                src="https://api.maptiler.com/resources/logo.svg" alt="MapTiler logo"/></a>
-            <div class="map" #map></div>
-          </div>
-
-        <div class="agregarIncidente">
-
-            <form [ngClass]="{'formView': mostrar, 'formOculto': !mostrar}"  ation="">
+            <form [ngClass]="{'formView': mostrar, 'formOculto': !mostrar}"  [formGroup]="validForm">
                 <h2>Agregar incidente</h2>
 
                 <div class="item">
                     <label for="">Fecha:</label>
-                    <input type="date" name="" id="">
+                    <input type="date" name="" id="" formControlName="Fecha">
+                    <div  *ngIf="Fecha?.invalid && ( Fecha?.touched || Fecha?.dirty )"  class="errorsInput">
+                        {{errorsInput(Fecha?.errors, 'Fecha')}}
+                    </div>
                 </div>
                 <div class="item">
                     <label for="">Hora:</label>
-                    <input type="number" name="" id="">
+                    <input type="text" name="" id="" formControlName="Hora">
+                    <div  *ngIf="Hora?.invalid && ( Hora?.touched || Hora?.dirty )"  class="errorsInput">
+                        {{errorsInput(Hora?.errors, 'Hora')}}
+                    </div>
                 </div>
                 <div class="item">
                     <label for="">Tipo de incidente:</label>
-                    <select>
+                    <select formControlName="IdEvento">
                         <option value="" [disabled]="true">--Seleccione una opción--</option>
                         <option *ngFor="let evento of eventos" value="{{evento?.id_evento}}">{{evento?.nombre_evento}}</option>
                     </select>
+                    <div  *ngIf="IdEvento?.invalid && ( IdEvento?.touched || IdEvento?.dirty )"  class="errorsInput">
+                        {{errorsInput(IdEvento?.errors, 'IdEvento')}}
+                    </div>
                 </div>
                 <div class="item">
                     <label for="">Descripción:</label>
-                    <textarea name="" id="" cols="30" rows="10"></textarea>
+                    <textarea name="" id="" cols="30" rows="10" formControlName="Descripcion"></textarea>
+                    <div  *ngIf="Descripcion?.invalid && ( Descripcion?.touched || Descripcion?.dirty )"  class="errorsInput">
+                        {{errorsInput(Descripcion?.errors, 'Descripcion')}}
+                    </div>
                 </div>
                 <div class="item-fotos">
                     <a href="">Aregar fotos</a>
                 </div>
-                <input type="button" value="Agregar">
+                <input type="button" value="Agregar" (click)="onSubmit($event)">
             </form>
-            <div [ngClass]="{'plusSelected': mostrar, 'plusNoSelected': !mostrar}" class="plus" (click)="showHidden()">
+            <!--div [ngClass]="{'plusSelected': mostrar, 'plusNoSelected': !mostrar}" class="plus" (click)="showHidden()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-shield-plus" viewBox="0 0 16 16">
                     <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
                     <path d="M8 4.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V9a.5.5 0 0 1-1 0V7.5H6a.5.5 0 0 1 0-1h1.5V5a.5.5 0 0 1 .5-.5z"/>
                 </svg>
-            </div>
+            </div-->
         </div>
     </div>
 </div>

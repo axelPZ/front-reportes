@@ -26,4 +26,11 @@ import { Global } from './global';
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
         return this._http.get(`${this.url}/Eventos`, {headers: headers });
     }
+
+    //Agregar un registro
+    addRegistro(token:any|string, data:any):Observable<any>{
+        const headers = new HttpHeaders().set('Content-Type', 'application/json')
+                                         .set('Authorization', `Bearer ${token}`);
+        return this._http.post(`${this.url}/Registros`, JSON.stringify(data), {headers: headers})
+    }
 }
