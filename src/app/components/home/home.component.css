@@ -168,3 +168,61 @@
     height: 100%;
     position: static!important;
   }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.detalleEvento{
+    width: 200px;
+    font-size: 12px;
+    background-color: transparent;
+    overflow: scroll;
+    padding: 3px;
+}
+.contImg {
+    position: relative;
+}
+.contImg button {
+    position: absolute;
+    z-index: 1;
+    background: transparent;
+   cursor: pointer;
+   text-align: center;
+   right: 0;
+}
+
+.imagenes {
+    width: 100%;
+    height: 100px;
+}
+
+.imagenes img {
+    width: 90%;
+    height: auto;
+}
+
+  
+/* Estilo de la barra de desplazamiento vertical */
+::-webkit-scrollbar {
+    width: 4px; /* Ancho más pequeño de la barra de desplazamiento vertical */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #888; /* Color de fondo de la barra de desplazamiento vertical */
+    border-radius: 4px; /* Borde redondeado de la barra de desplazamiento vertical */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Color de fondo de la pista de la barra de desplazamiento vertical */
+    border-radius: 4px; /* Borde redondeado de la pista de la barra de desplazamiento vertical */
+  }
+  
+  /* Ocultar la barra de desplazamiento horizontal */
+  ::-webkit-scrollbar-thumb:horizontal {
+    display: none;
+  }
+  
+  ::-webkit-scrollbar-track:horizontal {
+    display: none;
+  }

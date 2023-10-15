@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   public spinner:boolean;
   private token:string;
   private dataUser:any;
-
+  public agregarImg:boolean = false;
 
   constructor(
     private _fb: FormBuilder,
@@ -172,11 +172,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+
 //Iniciar las comfiguraciones del mapa
   private initMap():void {
     this.map = L.map('map', {
       center: [ 14.634915, -90.506882 ],
-      zoom: 3
+      zoom: 8
     });
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -195,13 +196,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     tiles.addTo(this.map);
 
       // Definir el icono personalizado
-  const customIcon = L.icon({
-    iconUrl: './assets/images/marker-icon.png', // Reemplaza con la ruta correcta de tu icono
-    iconSize: [25, 41], // Tamaño del icono
-    iconAnchor: [16, 32], // Punto de anclaje del icono (donde se conecta al marcador)
-    popupAnchor: [0, -32] // Punto donde se muestra el popup en relación con el icono
-  });
-
+    const customIcon = L.icon({
+      iconUrl: './assets/images/marker-icon.png', // Reemplaza con la ruta correcta de tu icono
+      iconSize: [25, 41], // Tamaño del icono
+      iconAnchor: [16, 32], // Punto de anclaje del icono (donde se conecta al marcador)
+      popupAnchor: [0, -32] // Punto donde se muestra el popup en relación con el icono
+    });
 
     const guatemalaMarker = L.marker([14.634915, -90.506882], { icon: customIcon }).addTo(this.map);
     guatemalaMarker.bindPopup('Ciudad de Guatemala').openPopup(); // Agrega un mensaje emergente al marcador
@@ -215,7 +215,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       console.log("cordenadas ", `${latlng.lat.toFixed(6)}|${latlng.lng.toFixed(6)}` )
       if(this._userService.getDataUser() ){
         this.token = this.dataUser.token;
-        this.showHidden();
+      //  this.showHidden();
         this.coordenas=`${latlng.lat.toFixed(6)}|${latlng.lng.toFixed(6)}`;
       }else {
         Swal.fire(
@@ -242,7 +242,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         const cordenadas = r.cordenadas.split('|');
         console.log("Registro ", cordenadas);
         const marker = L.marker( [cordenadas[0], cordenadas[1] ], { icon: customIcon }).addTo(this.map);
-        marker.bindPopup(`Evento: ${ r.evento }, Fecha ${ r.fecha }`).openPopup();
+
+        //Popop del incidente
+        const popopIncidente = this.getStylePopu(r);
+        marker.bindPopup(popopIncidente).openPopup();
       });
      
     }, error => {
@@ -288,10 +291,57 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  showHidden() {
-    this.mostrar = !this.mostrar;
+  showHidden(e:any) {
+    e.preventDefault()
+    this.agregarImg = !this.agregarImg;
   }
 
   ngOnDestroy() {
+  }
+
+  addFile(e:any, fileType:number){
+    const file: File = e.target.files[0];
+    console.log("file ", file)
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const b64 = reader.result as string;
+        console.log(b64);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  getStylePopu(r:any):string {
+    const url = this._router.createUrlTree(['/Register']).toString();
+    console.log("URL ", url )
+    return `<div class="detalleEvento">
+    <table>
+     <tr>
+         <td><b>Evento</b></td>
+         <td>${r.evento}</td>
+     </tr>
+     <tr>
+         <td><b>Fecha</b></td>
+         <td>${r.fecha}</td>
+     </tr>
+     <tr>
+         <td align="center" valign="center" colspan="2">
+             <a href='${url}?${r.id}'>Detalles <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+                 <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+               </svg></a>
+         </td>
+     </tr>
+     <tr><td colspan="2" height="2" style="border-bottom: 1px solid black;"></td></tr>
+     <tr><td colspan="2" align="center" class="contImg"> 
+         <div class="imagenes">
+             <img src="https://i.pinimg.com/originals/34/22/90/3422900cb9e9bd4ce803847129eb6c9f.jpg" width="100px" alt="">
+         </div>
+         </td>
+     </tr>
+    </table>
+ </div>`;
+
   }
 }
