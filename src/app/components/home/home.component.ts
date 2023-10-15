@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
-import { GoogleMap } from '@angular/google-maps';
 import { Map, NavigationControl } from 'maplibre-gl';
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -43,7 +42,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const initialState = { lng: -90.61416733456322, lat: 14.503790221782317, zoom: 14 };
     this.map = new Map({
       container: this.mapContainer.nativeElement,
-      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=dUVDBugrdiqbX0xSVyEi`,
+      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=rJw0PTMqizcCOBKTT99Q`,
       center: [initialState.lng, initialState.lat],
       zoom: initialState.zoom
     });

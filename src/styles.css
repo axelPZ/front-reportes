@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~maplibre-gl/dist/maplibre-gl.css';
+
 * {
     margin: 0;
     padding: 0;
@@ -39,9 +41,9 @@ body {
 
 }
 
-<<<<<<< HEAD
+
 #map { height: 100vh; }
-=======
+
 .loader {
     width: 48px;
     height: 48px;
@@ -96,4 +98,3 @@ body {
     }
   }
       
->>>>>>> df30b904960685205e524f152248a26da2ac38b2

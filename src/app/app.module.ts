@@ -6,8 +6,6 @@ import { routing, appRoutingProviders } from './app.routing';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { GoogleMapsModule } from '@angular/google-maps';
-
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -41,7 +39,6 @@ import { TerminosCondicionesComponent } from './components/terminos-condiciones/
   imports: [
     BrowserModule,
     routing,
-    GoogleMapsModule,
     ReactiveFormsModule,
     HttpClientModule
   ],
