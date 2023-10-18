@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as L from 'leaflet';
-import { Observable, interval } from 'rxjs';
-import { observeOn, startWith, switchMap } from 'rxjs/operators';
+import { interval } from 'rxjs';
+
 import { ReporteServices } from 'src/app/services/reportes.services';
 import { UserServices } from 'src/app/services/user.services';
 import Swal from 'sweetalert2';
@@ -23,6 +23,12 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private token:string;
   private dataUser:any;
   public agregarImg:boolean = false;
+  public image1:string;
+  public image2:string;
+  public item:number = 1;
+
+  public horas = Array.from({ length: 12 }, (_, index) => (index + 1).toString().padStart(2, '0'));
+  public minutos = Array.from({ length: 59 }, (_, index) => (index + 1).toString().padStart(2, '0'));
 
   constructor(
     private _fb: FormBuilder,
@@ -35,6 +41,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.eventos = [];
     this.spinner = false;
     this.token = '';
+    this.image1 = '';
+    this.image2 = '';
   }
 
   ngOnInit() {
@@ -57,7 +65,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get IdEvento(){
-    return this.validForm.get("Fecha");
+    return this.validForm.get("IdEvento");
   }
 
   get Fecha(){
@@ -65,13 +73,18 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get Descripcion(){
-    return this.validForm.get("Fecha");
+    return this.validForm.get("Descripcion");
   }
 
-  get Hora(){
-    return this.validForm.get("Fecha");
+  get HH(){
+    return this.validForm.get("HH");
   }
 
+  get MM(){
+    return this.validForm.get("MM");
+  }
+
+  //Iniciamos las reglas del formulario
   initForm():FormGroup{
     return this._fb.group({
       IdEvento: ['', [
@@ -86,23 +99,32 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       Descripcion: ['',[
         Validators.required,
         Validators.maxLength(500),
-        Validators.minLength(50)
+       Validators.minLength(10),
+        Validators.pattern('[a-zA-Z0-9áéíóúÁÉÍÓÚÑñ ]*')
       ]],
-      Hora: ['', [
-        Validators.required
+      HH: ['', [
+        Validators.required,
+        Validators.maxLength(2),
+        Validators.minLength(2),
+        Validators.pattern('[0-9]*')
+      ]],
+      MM: ['', [
+        Validators.required,
+        Validators.maxLength(2),
+        Validators.minLength(2),
+        Validators.pattern('[0-9]*')
       ]]
-
     })
   }
 
+  //respuesta de los errores
   errorsInput(e:any, tipo:string){
-    console.log(e)
     if(e?.required){
       return `${tipo} requerido` ;
     }else if(e?.minlength){
-      return `${tipo} con menos de ${e.minlength.requiredLength} caracteres no valido`; 
+      return `${tipo} con menos de ${e.minlength.requiredLength} carácteres no valido`; 
     }else if(e?.maxlength){
-      return `${tipo} con mas de ${e.maxlength.requiredLength} caracteres no valido`; 
+      return `${tipo} con mas de ${e.maxlength.requiredLength} carácteres no valido`; 
     }else if(e?.fechaInvalida){
       return `Fecha no valida`; 
     }{
@@ -123,8 +145,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     return null;
   }
 
-
+//envio del formulario
   onSubmit(e:any){
+    this.spinner = true;
     console.log("data ", this.validForm );    
     if( !this.validForm.invalid ){
       const data = {
@@ -132,11 +155,13 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         "Hora": this.validForm.value.Hora,
         "idEvento": this.validForm.value.IdEvento,
         "descripcion": this.validForm.value.Descripcion,
-        "cordenadas": this.coordenas
+        "cordenadas": this.coordenas,
+        "Imagen1": this.image1,
+        "Imagen2": this.image2
       }
 
-      console.log("id del envento ", data)
 
+      console.log(JSON.stringify(data));
       this._rServices.addRegistro( this.token, data).subscribe( response => {
 
         Swal.fire({
@@ -145,6 +170,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           showConfirmButton: true,
           heightAuto: false,
         });
+        this.mostrar = false;
+        this.spinner = false;
 
       }, error => {
         this.spinner = false;
@@ -158,8 +185,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
           heightAuto: false
         });
       })
-
-      console.log("data ", data);
+      this.spinner = false;
     }else{
       this.spinner = false;
       Swal.fire({
@@ -169,6 +195,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         showConfirmButton: true,
         heightAuto: false
       });
+      this.spinner = false;
     }
   }
 
@@ -212,10 +239,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
    //Funcion que detecta un click en el mapa
     private onMapClick(e: L.LeafletMouseEvent, customIcon: L.Icon): void {
       const latlng = e.latlng;
-      console.log("cordenadas ", `${latlng.lat.toFixed(6)}|${latlng.lng.toFixed(6)}` )
       if(this._userService.getDataUser() ){
         this.token = this.dataUser.token;
-      //  this.showHidden();
+        this.mostrar = !this.mostrar;
         this.coordenas=`${latlng.lat.toFixed(6)}|${latlng.lng.toFixed(6)}`;
       }else {
         Swal.fire(
@@ -226,7 +252,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
-
+//Obtener el tipo de reportes
   getReportes(limpiar=0) {
    if(limpiar) this.clearMap();
     const customIcon = L.icon({
@@ -237,10 +263,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this._rServices.getIncidentes().subscribe(response => {
-      console.log(response);
       response.forEach( (r:any) => {
         const cordenadas = r.cordenadas.split('|');
-        console.log("Registro ", cordenadas);
         const marker = L.marker( [cordenadas[0], cordenadas[1] ], { icon: customIcon }).addTo(this.map);
 
         //Popop del incidente
@@ -258,13 +282,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         heightAuto: false
       });
     });
-
-   /* return new Observable<any>( observer => {
-      observer.of('Valor emitido por la');
-      //observer.complete();
-    })*/
   }
 
+  //Obtener los eventos de la base de datos
   getEventos() {
     this._rServices.getEventos().subscribe(response => {
       this.eventos = response.Eventos;
@@ -299,23 +319,72 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
   }
 
+  //Convertir imagen en base64
   addFile(e:any, fileType:number){
     const file: File = e.target.files[0];
-    console.log("file ", file)
-
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        const b64 = reader.result as string;
-        console.log(b64);
+      reader.onload = (event: any) => {
+        const base64: string = event.target.result;
+        this.resizeImage(base64, file.type, fileType);
       };
       reader.readAsDataURL(file);
     }
   }
 
+//cambiar de tamaño la imagen
+resizeImage(base64: string, type:string, cont:number) {
+  const img = new Image();
+
+  img.onload = () => {
+    const maxWidth = 800; // ajusta según tus necesidades
+    const maxHeight = 600; // ajusta según tus necesidades
+
+    let newWidth = img.width;
+    let newHeight = img.height;
+
+    // Redimensionar proporcionalmente solo si supera los límites
+    if (img.width > maxWidth) {
+      const ratio = maxWidth / img.width;
+      newWidth = maxWidth;
+      newHeight = img.height * ratio;
+    }
+
+    if (newHeight > maxHeight) {
+      const ratio = maxHeight / newHeight;
+      newHeight = maxHeight;
+      newWidth *= ratio;
+    }
+
+    // Crear un lienzo para redimensionar la imagen
+    const canvas = document.createElement('canvas');
+    canvas.width = newWidth;
+    canvas.height = newHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+    // Obtener la nueva imagen en base64
+    const resizedBase64 = canvas.toDataURL(type); // Puedes cambiar a 'image/png' si prefieres PNG
+    if( cont == 1) this.image1 = resizedBase64;
+    if( cont == 2) this.image2 = resizedBase64;
+  };
+  img.src = base64;
+}
+
+continuarRegresar(e:any){
+  if( e.target.value == 'Continuar'){
+    if(this.item >=2) return
+    this.item ++;
+  }else{
+    if(this.item <=1 ) return
+    this.item --;
+  }
+}
+
+//Estilo del popop del mapa
   getStylePopu(r:any):string {
     const url = this._router.createUrlTree(['/Register']).toString();
-    console.log("URL ", url )
+    const imgURl = ( r.imagen1 ) ? r.imagen1 : "https://i.pinimg.com/originals/34/22/90/3422900cb9e9bd4ce803847129eb6c9f.jpg"
     return `<div class="detalleEvento">
     <table>
      <tr>
@@ -336,7 +405,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
      <tr><td colspan="2" height="2" style="border-bottom: 1px solid black;"></td></tr>
      <tr><td colspan="2" align="center" class="contImg"> 
          <div class="imagenes">
-             <img src="https://i.pinimg.com/originals/34/22/90/3422900cb9e9bd4ce803847129eb6c9f.jpg" width="100px" alt="">
+             <img src="${imgURl}" width="100px" alt="">
          </div>
          </td>
      </tr>

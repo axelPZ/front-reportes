@@ -22,24 +22,48 @@
 }
 
 .agregarIncidente form {
-    width: 300px;
-    border: 1px solid #093a79;
-    border-radius: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 15px;
+
+    width: 400px;
+    border: 1px solid #093a79;
+    border-radius: 10px 10px 10px 10px;
     margin-right: 30px;
+
     box-shadow: 
     0 4px 8px rgba(0, 0, 0, 0.1),
     0 8px 16px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(8px);
+    /*backdrop-filter: blur(8px);*/
+    background-color: white;
     max-height: 70%;
     position: absolute;
-    left: 0;
+    left: 10px;
     z-index: 1;
     transition: left 0.3s ease-out, opacity 0.3s ease-out, visibility 0.3s ease-out;
+}
+
+.agregarIncidente form h2 {
+    background: #093a79;
+    color: white!important;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.agregarIncidente form .item {
+    position: relative;
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    padding: 0 25px;
+    margin-top: 20px;
 }
 
 .formOculto {
@@ -98,15 +122,13 @@
     }
 }
 
-.agregarIncidente form .item {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 5px;
-    margin-top: 10px;
-}
+
 .agregarIncidente form h2, label {
     color: #093a79;
+}
+
+.agregarIncidente form input[type='file']{
+    background-color: white;
 }
 
 .agregarIncidente form textarea, input, select {
@@ -118,14 +140,14 @@
 }
 
 .agregarIncidente form input, select {
-    padding: 5px;
+    padding: 10px;
     border-radius: 10px;
 }
 
 .agregarIncidente form textarea {
     border-radius: 10px;
-    max-width: 100%;
-    min-width: 100%;
+    max-width: 97%;
+    min-width: 97%;
     min-height: 60px!important;
     max-height: 60px!important;
 
@@ -136,16 +158,7 @@
     color: #093a79;
 }
 
-.agregarIncidente form input[type=button] {
-    width: 100%;
-    background: #093a79;
-    color: white;
-    font-weight: bold;
-    margin: 5px 0;
-    box-shadow: 
-    0 4px 8px rgba(0, 0, 0, 0.1),
-    0 8px 16px rgba(0, 0, 0, 0.2);
-}
+
 
 .map-container {
     position: relative;
@@ -226,3 +239,78 @@
   ::-webkit-scrollbar-track:horizontal {
     display: none;
   }
+
+  form label span.requerido {
+    color: red!important;
+    }
+
+form .errors {
+    position: absolute;
+    width: 100%;
+    color: red;
+    font-weight: bold;
+    font-size: 11px;
+    
+    border-radius: 5px;
+    padding-left: 5px;
+}
+
+form .errorsInputTextA {
+    bottom: -11px;
+}
+
+form .errorsInput {
+    bottom: -11px;
+}
+
+.hora {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.hora > div {
+ width: 30%;
+ margin-left: 5px;
+ position: relative;
+}
+
+.hora input, .hora select {
+    max-width: 80%;
+    min-width: 80%;
+}
+
+.botones {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    @media( max-width: 340px){
+        margin-top: 10px;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+}
+
+.agregarIncidente form .botones > input {
+    width: 150px;
+    background: #093a79;
+    color: white;
+    font-weight: bold;
+    margin: 5px 0;
+    cursor: pointer;
+}
+
+
+.botones:last-child{
+    margin-left: 5px;
+}
+
+.spinner {
+    position: absolute!important;
+    bottom: 0;
+}

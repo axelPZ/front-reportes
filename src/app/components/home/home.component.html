@@ -12,74 +12,81 @@
             <form [ngClass]="{'formView': mostrar, 'formOculto': !mostrar}"  [formGroup]="validForm">
                 <h2>Agregar incidente</h2>
 
-                <div *ngIf="!agregarImg" class="item">
-                    <label for="">Fecha:</label>
+                <div *ngIf="item == 1" class="item">
+                    <label for="">Fecha:<span class="requerido">*</span></label>
                     <input type="date" name="" id="" formControlName="Fecha">
-                    <div  *ngIf="Fecha?.invalid && ( Fecha?.touched || Fecha?.dirty )"  class="errorsInput">
+                    <div  *ngIf="Fecha?.invalid && ( Fecha?.touched || Fecha?.dirty )"  class="errors errorsInput">
                         {{errorsInput(Fecha?.errors, 'Fecha')}}
                     </div>
                 </div>
-                <div *ngIf="!agregarImg" class="item">
-                    <label for="">Hora:</label>
-                    <input type="text" name="" id="" formControlName="Hora">
-                    <div  *ngIf="Hora?.invalid && ( Hora?.touched || Hora?.dirty )"  class="errorsInput">
-                        {{errorsInput(Hora?.errors, 'Hora')}}
+                <div *ngIf="item == 1" class="item">
+                    <label for="">Hora:<span class="requerido">*</span></label>
+                    <div class="hora">
+                        <div class="horas">
+                            <select formControlName="HH">
+                                <option value="00" selected>00:</option>
+                                <option *ngFor="let hora of horas" value="{{hora}}">{{hora}}</option>
+                            </select>
+                            <div  *ngIf="HH?.invalid && ( HH?.touched || HH?.dirty )"  class="errors errorsInput">
+                                {{errorsInput(HH?.errors, 'HH')}}
+                            </div>
+                        </div>
+                        <div class="minutos">
+                            <select formControlName="MM">
+                                <option value="00" selected>00</option>
+                                <option *ngFor="let minuto of minutos" value="{{minuto}}">{{minuto}}</option>
+                            </select>
+                            <div  *ngIf="MM?.invalid && ( MM?.touched || MM?.dirty )"  class="errors errorsInput">
+                                {{errorsInput(MM?.errors, 'MM')}}
+                            </div>
+                        </div>
+                        <div class="periodo">
+                            <select>
+                                <option value="AM"selected>AM</option>
+                                <option value="PM">PM</option>
+                            </select>
+                          
+                        </div>                       
                     </div>
                 </div>
-                <div *ngIf="!agregarImg" class="item">
-                    <label for="">Tipo de incidente:</label>
+                <div *ngIf="item == 1" class="item">
+                    <label for="">Tipo de incidente:<span class="requerido">*</span></label>
                     <select formControlName="IdEvento">
                         <option value="" [disabled]="true">--Seleccione una opción--</option>
                         <option *ngFor="let evento of eventos" value="{{evento?.id_evento}}">{{evento?.nombre_evento}}</option>
                     </select>
-                    <div  *ngIf="IdEvento?.invalid && ( IdEvento?.touched || IdEvento?.dirty )"  class="errorsInput">
+                    <div  *ngIf="IdEvento?.invalid && ( IdEvento?.touched || IdEvento?.dirty )"  class="errors errorsInput">
                         {{errorsInput(IdEvento?.errors, 'IdEvento')}}
                     </div>
                 </div>
-                <div *ngIf="!agregarImg" class="item">
-                    <label for="">Descripción:</label>
+                <div *ngIf="item == 1" class="item">
+                    <label for="">Descripción:<span class="requerido">*</span></label>
                     <textarea name="" id="" cols="30" rows="10" formControlName="Descripcion"></textarea>
-                    <div  *ngIf="Descripcion?.invalid && ( Descripcion?.touched || Descripcion?.dirty )"  class="errorsInput">
-                        {{errorsInput(Descripcion?.errors, 'Descripcion')}}
+                    <div  *ngIf="Descripcion?.invalid && ( Descripcion?.touched || Descripcion?.dirty )"  class="errors errorsInputTextA">
+                        {{errorsInput(Descripcion?.errors, 'Descripción')}}
                     </div>
                 </div>
 
-                <div *ngIf="agregarImg" class="item">
+                <div *ngIf="item == 2" class="item">
                     <label for="">Foto 1</label>
                     <input type="file" name="" id="" (change)="addFile($event,1)">
                 </div>
                 
-                <div *ngIf="agregarImg" class="item">
+                <div *ngIf="item == 2" class="item">
                     <label for="">Foto 2</label>
                     <input type="file" name="" id="" (change)="addFile($event, 2)">
                 </div>
-                
-                <div *ngIf="agregarImg" class="item">
-                    <label for="">Foto 3</label>
-                    <input type="file" name="" id="" (change)="addFile($event, 3)">
-                </div>
 
-                <div *ngIf="!agregarImg" class="item-fotos">
-                    <a href="" (click)="showHidden($event)">Fotos <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-plus" viewBox="0 0 16 16">
-                        <path d="M8 6.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 .5-.5z"/>
-                        <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
-                      </svg></a>
+                <div *ngIf="spinner"  class="spinner">
+                    <span class="loader"></span>
                 </div>
-
-                <div *ngIf="agregarImg" class="item-fotos">
-                    <a (click)="showHidden($event)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
-                      </svg>Regresar</a>
+              
+                <div class="botones">
+                    <input *ngIf="item >=2" type="button" [disabled]="spinner" value="Regresar" (click)="continuarRegresar($event)">
+                    <input *ngIf="item <= 1"type="button" [disabled]="spinner" value="Continuar" (click)="continuarRegresar($event)">
+                    <input *ngIf="item >= 2"type="button" [disabled]="spinner" value="Agregar Incidente" (click)="onSubmit($event)" >
                 </div>
-
-                <input type="button" value="Agregar" (click)="onSubmit($event)">
             </form>
-            <!--div [ngClass]="{'plusSelected': mostrar, 'plusNoSelected': !mostrar}" class="plus" (click)="showHidden()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-shield-plus" viewBox="0 0 16 16">
-                    <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
-                    <path d="M8 4.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V9a.5.5 0 0 1-1 0V7.5H6a.5.5 0 0 1 0-1h1.5V5a.5.5 0 0 1 .5-.5z"/>
-                </svg>
-            </div-->
         </div>
     </div>
 </div>
