@@ -73,9 +73,9 @@
                     <span class="loader"></span>
                   </div>
                 <div class="botones">
-                    <input *ngIf="item >=2" type="button" value="Regresar" (click)="continuarRegresar($event)">
-                    <input *ngIf="item < 3"type="button" value="Continuar" (click)="continuarRegresar($event)">
-                    <input *ngIf="item >= 3"type="button" value="Registrarme" (click)="onSubmit($event)" >
+                    <input [disabled]="spinner" *ngIf="item >=2" type="button" value="Regresar" (click)="continuarRegresar($event)">
+                    <input [disabled]="spinner" *ngIf="item < 3"type="button" value="Continuar" (click)="continuarRegresar($event)">
+                    <input [disabled]="spinner" *ngIf="item >= 3"type="button" value="Registrarme" (click)="onSubmit($event)" >
                 </div>
             </form>
         </div>

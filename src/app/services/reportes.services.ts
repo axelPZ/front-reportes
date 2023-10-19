@@ -15,6 +15,13 @@ import { Global } from './global';
         this.url = Global.url;
     }
 
+
+    //Obtener registro por id
+    getIdIncidente(id:string):Observable<any>{
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+        return this._http.get(`${this.url}/Registros/Search/${id}`, {headers: headers });
+    }
+
     //Obtener los registros
     getIncidentes():Observable<any>{
         const headers = new HttpHeaders().set('Content-Type', 'application/json');

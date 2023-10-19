@@ -47,6 +47,7 @@ export class AuthComponent implements OnInit {
           text: 'Ahora puedes agregar incidentes, ten en cuenta que cada vez que quieras ingresar un incidente, tendras que inciar session, ya que el sistema no guarda información de sesión',
           showConfirmButton: true,
           heightAuto: false,
+          confirmButtonColor: '#093a79'
         });
         console.log("response ", response );
         this._usrServices.setDataUser(response);
@@ -62,7 +63,8 @@ export class AuthComponent implements OnInit {
           title: '¡Oops!',
           text: errorMensaje,
           showConfirmButton: true,
-          heightAuto: false
+          heightAuto: false,
+          confirmButtonColor: '#093a79'
         });
 
       })
@@ -74,7 +76,8 @@ export class AuthComponent implements OnInit {
         title: '¡Oops!',
         text: 'Parece que el formulario no esta correctamente lleno, por favor reviselo e intentelo de nuevo',
         showConfirmButton: true,
-        heightAuto: false
+        heightAuto: false,
+        confirmButtonColor: '#093a79'
       });
     }
   }

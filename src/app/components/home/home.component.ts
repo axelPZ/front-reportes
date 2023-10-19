@@ -26,6 +26,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   public image1:string;
   public image2:string;
   public item:number = 1;
+  public periodo:string = 'AM';
 
   public horas = Array.from({ length: 12 }, (_, index) => (index + 1).toString().padStart(2, '0'));
   public minutos = Array.from({ length: 59 }, (_, index) => (index + 1).toString().padStart(2, '0'));
@@ -37,7 +38,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     private _route: ActivatedRoute, 
     private _userService: UserServices
   ) { 
-    this.mostrar = true;
+    this.mostrar = false;
     this.eventos = [];
     this.spinner = false;
     this.token = '';
@@ -58,6 +59,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const intDosMin = interval(2 * 60 * 1000);
     intDosMin.subscribe( val => { this.getReportes(1) } );
   }
+
+
 
   ngAfterViewInit():void { 
     //Iniciar el mapa
@@ -84,6 +87,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.validForm.get("MM");
   }
 
+
+
   //Iniciamos las reglas del formulario
   initForm():FormGroup{
     return this._fb.group({
@@ -100,7 +105,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         Validators.required,
         Validators.maxLength(500),
        Validators.minLength(10),
-        Validators.pattern('[a-zA-Z0-9áéíóúÁÉÍÓÚÑñ ]*')
+        Validators.pattern('[a-zA-Z0-9áéíóúÁÉÍÓÚÑñ,;\-_\.,: \n]*')
       ]],
       HH: ['', [
         Validators.required,
@@ -116,6 +121,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       ]]
     })
   }
+
+
 
   //respuesta de los errores
   errorsInput(e:any, tipo:string){
@@ -133,6 +140,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
+
+  
   // Función de validación personalizada para la fecha
   fechaValidator(control:any) {
     const inputDate = new Date(control.value);
@@ -145,23 +154,23 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     return null;
   }
 
+
+
+
 //envio del formulario
   onSubmit(e:any){
     this.spinner = true;
-    console.log("data ", this.validForm );    
     if( !this.validForm.invalid ){
       const data = {
         "Fecha": this.validForm.value.Fecha,
-        "Hora": this.validForm.value.Hora,
         "idEvento": this.validForm.value.IdEvento,
         "descripcion": this.validForm.value.Descripcion,
         "cordenadas": this.coordenas,
         "Imagen1": this.image1,
-        "Imagen2": this.image2
+        "Imagen2": this.image2,
+        "Hora": `${this.validForm.value.HH}:${this.validForm.value.MM} ${this.periodo}`
       }
 
-
-      console.log(JSON.stringify(data));
       this._rServices.addRegistro( this.token, data).subscribe( response => {
 
         Swal.fire({
@@ -172,6 +181,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         this.mostrar = false;
         this.spinner = false;
+        this.validForm.reset();
 
       }, error => {
         this.spinner = false;
@@ -200,14 +210,23 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
+
+
+
 //Iniciar las comfiguraciones del mapa
   private initMap():void {
     this.map = L.map('map', {
       center: [ 14.634915, -90.506882 ],
       zoom: 8
     });
-
-    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  
+    const tiposMaspas = [ 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', //carreteras
+                          'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', // topoGrafico
+                          'https://api.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg' //satelital
+                            ]
+   // const tiles = L.tileLayer( Mapa de carreteras
+   const tiles = L.tileLayer( tiposMaspas[0],
+    {
       maxZoom: 18,
       minZoom: 8,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -215,8 +234,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
    // Define los límites máximos para restringir la vista a Guatemala
    const maxBounds: L.LatLngBoundsExpression = [
-    [7, -94],
-    [22, -83],
+    [13.6699, -92.2369], // Límite inferior izquierdo
+    [17.8152, -88.2250]  // Límite superior derecho
     ];
     this.map.setMaxBounds(maxBounds);
 
@@ -236,6 +255,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.map.on('click', (e:any) => this.onMapClick(e, customIcon));
   }
 
+
+
+
+
    //Funcion que detecta un click en el mapa
     private onMapClick(e: L.LeafletMouseEvent, customIcon: L.Icon): void {
       const latlng = e.latlng;
@@ -244,13 +267,25 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         this.mostrar = !this.mostrar;
         this.coordenas=`${latlng.lat.toFixed(6)}|${latlng.lng.toFixed(6)}`;
       }else {
-        Swal.fire(
-          '¡No as iniciado sesión!',
-          'Si quieres agregar un registro, primero debes de iniciar sesión',
-          'question'
-        )
+        Swal.fire({
+          title: '¡No as iniciado sesión!',
+          icon: 'question',
+          text: 'Si quieres agregar un registro, primero debes de iniciar sesión',
+          showDenyButton: true,
+          showCancelButton: false,
+          confirmButtonText: 'Iniciar Sesión',
+          denyButtonText: `No ahora`,
+          confirmButtonColor: '#093a79'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this._router.navigate(['/Auth']);
+          }
+        })
       }
     }
+
+
+
 
 //Obtener el tipo de reportes
   getReportes(limpiar=0) {
@@ -263,6 +298,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this._rServices.getIncidentes().subscribe(response => {
+
       response.forEach( (r:any) => {
         const cordenadas = r.cordenadas.split('|');
         const marker = L.marker( [cordenadas[0], cordenadas[1] ], { icon: customIcon }).addTo(this.map);
@@ -284,6 +320,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+
+
+
   //Obtener los eventos de la base de datos
   getEventos() {
     this._rServices.getEventos().subscribe(response => {
@@ -301,6 +340,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+
+
   //limpiar el mapa de todos los puntos de referencia
   private clearMap(): void {
     // Limpia todas las capas del mapa, incluyendo los marcadores
@@ -310,6 +351,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
   }
+
+
 
   showHidden(e:any) {
     e.preventDefault()
@@ -331,6 +374,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       reader.readAsDataURL(file);
     }
   }
+
+
+
 
 //cambiar de tamaño la imagen
 resizeImage(base64: string, type:string, cont:number) {
@@ -371,6 +417,9 @@ resizeImage(base64: string, type:string, cont:number) {
   img.src = base64;
 }
 
+
+
+
 continuarRegresar(e:any){
   if( e.target.value == 'Continuar'){
     if(this.item >=2) return
@@ -381,9 +430,22 @@ continuarRegresar(e:any){
   }
 }
 
+
+
+
+//Agregar periodo
+addPeriodo(e:any){
+  const value = e.target.value;
+  this.periodo = value.toUpperCase();
+  console.log("PEriodo ", this.periodo);
+}
+
+
+
+
 //Estilo del popop del mapa
   getStylePopu(r:any):string {
-    const url = this._router.createUrlTree(['/Register']).toString();
+    const url = this._router.createUrlTree(['/Event/Detalle']).toString();
     const imgURl = ( r.imagen1 ) ? r.imagen1 : "https://i.pinimg.com/originals/34/22/90/3422900cb9e9bd4ce803847129eb6c9f.jpg"
     return `<div class="detalleEvento">
     <table>
@@ -397,7 +459,7 @@ continuarRegresar(e:any){
      </tr>
      <tr>
          <td align="center" valign="center" colspan="2">
-             <a href='${url}?${r.id}'>Detalles <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+             <a href='${url}/${r.id}'>Detalles <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
                  <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
                </svg></a>
          </td>

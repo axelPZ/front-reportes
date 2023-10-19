@@ -9,6 +9,7 @@ import { ValidEmailComponent } from './components/valid-email/valid-email.compon
 import { RequestPassComponent } from './components/request-pass/request-pass.component';
 import { QuienessomosComponent } from './components/quienessomos/quienessomos.component';
 import { TerminosCondicionesComponent } from './components/terminos-condiciones/terminos-condiciones.component';
+import { RegisterDetalleComponent } from './components/register-detalle/register-detalle.component';
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -18,6 +19,7 @@ const appRoutes: Routes = [
     { path: 'Valid/Email', component: ValidEmailComponent },
     { path: 'Terms/Conditions', component: TerminosCondicionesComponent },
     { path: 'Info', component: QuienessomosComponent },
+    { path: 'Event/Detalle/:id', component: RegisterDetalleComponent },
     { path: '**', component: HomeComponent }
 ]
 

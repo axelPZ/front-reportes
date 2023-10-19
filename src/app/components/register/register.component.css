@@ -16,13 +16,14 @@
 
 .agregarIncidente form {
     width: 35%;
-    border: 1px solid #fefefe;
-    border-radius: 20px;
+    border: 2px solid #093a79;
+    background-color: white;
+    border-radius: 25px;
+    padding-bottom: 15px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 30px 10px;
     margin-right: 30px;
     box-shadow: -18px 11px 13px rgb(251 251 251 / 10%), -20px 11px 16px 11px rgb(255 247 247 / 20%);
     -webkit-backdrop-filter: blur(15px);
@@ -36,12 +37,22 @@
         @media( max-width: 520px){
              padding: 5px 5px;
             min-width: 250px;
-
         }
-
     }
-
 }
+
+.agregarIncidente form h2{
+    color: white !important;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    background-color: #093a79;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
 .agregarIncidente form .item {
     display: flex;
     flex-direction: column;
@@ -59,11 +70,11 @@
     }
 }
 .agregarIncidente form h2, label {
-    color: white;
+    color: #093a79;
 }
 
 .agregarIncidente form textarea, input, select {
-    border: none;
+    border: 1px solid #093a79;
     outline: none;
 }
 .agregarIncidente form label {

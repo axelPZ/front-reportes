@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="periodo">
-                            <select>
+                            <select (change)="addPeriodo($event)">
                                 <option value="AM"selected>AM</option>
                                 <option value="PM">PM</option>
                             </select>

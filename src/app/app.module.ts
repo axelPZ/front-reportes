@@ -20,6 +20,7 @@ import { AddRegsitroComponent } from './components/add-regsitro/add-regsitro.com
 import { AddUpdateEventComponent } from './components/add-update-event/add-update-event.component';
 import { QuienessomosComponent } from './components/quienessomos/quienessomos.component';
 import { TerminosCondicionesComponent } from './components/terminos-condiciones/terminos-condiciones.component';
+import { RegisterDetalleComponent } from './components/register-detalle/register-detalle.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { TerminosCondicionesComponent } from './components/terminos-condiciones/
     AddRegsitroComponent,
     AddUpdateEventComponent,
     QuienessomosComponent,
-    TerminosCondicionesComponent
+    TerminosCondicionesComponent,
+    RegisterDetalleComponent
   ],
   imports: [
     BrowserModule,
